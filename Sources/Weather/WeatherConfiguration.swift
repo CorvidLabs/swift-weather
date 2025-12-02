@@ -1,5 +1,9 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 /// Configuration for the Weather client.
 public struct WeatherConfiguration: Sendable {
     /// User-Agent string for NWS API.
