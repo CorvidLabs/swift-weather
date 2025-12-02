@@ -1,5 +1,5 @@
 {
-  "originHash" : "e1474a0ad1de8235e4bbd380ee24aae43cb38b57563a260453455855fced26b0",
+  "originHash" : "02cd68ef048ed4c1e528acc3f67ace22ca98c00fca25e8ce92e896ed1040eb78",
   "pins" : [
     {
       "identity" : "swift-docc-plugin",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34",
         "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "swift-retry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CorvidLabs/swift-retry.git",
+      "state" : {
+        "revision" : "fef15fa025a5b412edc2f247027e211e0b80dbbd",
+        "version" : "0.1.0"
       }
     }
   ],

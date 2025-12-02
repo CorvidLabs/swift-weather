@@ -1,4 +1,5 @@
 import Foundation
+import Retry
 
 #if canImport(FoundationNetworking)
 import FoundationNetworking
@@ -89,25 +90,42 @@ public actor OpenMeteoProvider: WeatherProvider {
     }
 
     private func perform<T: Decodable>(_ request: URLRequest) async throws -> T {
-        let (data, response) = try await session.data(for: request)
+        try await Retry.execute(
+            maxAttempts: 3,
+            strategy: ExponentialStrategy(base: 1.0, multiplier: 2.0),
+            configuration: RetryConfiguration(
+                maxAttempts: 3,
+                shouldRetry: { error in
+                    guard let weatherError = error as? WeatherError else { return true }
+                    switch weatherError {
+                    case .rateLimited, .apiError, .networkError:
+                        return true
+                    case .unsupportedLocation, .decodingFailed, .noDataAvailable, .unknown, .locationNotFound, .noProviderAvailable, .invalidURL:
+                        return false
+                    }
+                }
+            )
+        ) { [session, decoder] in
+            let (data, response) = try await session.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw WeatherError.unknown("Invalid response type")
-        }
-
-        switch httpResponse.statusCode {
-        case 200...299:
-            do {
-                return try decoder.decode(T.self, from: data)
-            } catch {
-                throw WeatherError.decodingFailed(error)
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw WeatherError.unknown("Invalid response type")
             }
-        case 400:
-            throw WeatherError.apiError(statusCode: 400, message: "Bad request")
-        case 429:
-            throw WeatherError.rateLimited
-        default:
-            throw WeatherError.apiError(statusCode: httpResponse.statusCode, message: nil)
+
+            switch httpResponse.statusCode {
+            case 200...299:
+                do {
+                    return try decoder.decode(T.self, from: data)
+                } catch {
+                    throw WeatherError.decodingFailed(error)
+                }
+            case 400:
+                throw WeatherError.apiError(statusCode: 400, message: "Bad request")
+            case 429:
+                throw WeatherError.rateLimited
+            default:
+                throw WeatherError.apiError(statusCode: httpResponse.statusCode, message: nil)
+            }
         }
     }
 

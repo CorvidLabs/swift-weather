@@ -18,13 +18,19 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/CorvidLabs/swift-retry.git", from: "0.1.0"),
         .package(
             url: "https://github.com/swiftlang/swift-docc-plugin",
             from: "1.4.3"
         )
     ],
     targets: [
-        .target(name: "Weather"),
+        .target(
+            name: "Weather",
+            dependencies: [
+                .product(name: "Retry", package: "swift-retry"),
+            ]
+        ),
         .testTarget(
             name: "WeatherTests",
             dependencies: ["Weather"]
