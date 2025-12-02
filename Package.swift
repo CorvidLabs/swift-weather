@@ -24,18 +24,10 @@ let package = Package(
         )
     ],
     targets: [
-        .target(
-            name: "Weather",
-            swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
-            ]
-        ),
+        .target(name: "Weather"),
         .testTarget(
             name: "WeatherTests",
-            dependencies: ["Weather"],
-            swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
-            ]
+            dependencies: ["Weather"]
         )
     ]
 )
