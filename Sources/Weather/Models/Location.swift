@@ -8,9 +8,11 @@ public enum Location: Sendable, Equatable, Hashable {
     /// A location specified by city name.
     case city(String)
 
-    /// Whether this location is likely within the United States.
-    ///
-    /// Used to determine if NWS API should be attempted first.
+    /**
+     Whether this location is likely within the United States.
+
+     Used to determine if NWS API should be attempted first.
+     */
     public var isLikelyUS: Bool {
         switch self {
         case .coordinates(let lat, let lon):

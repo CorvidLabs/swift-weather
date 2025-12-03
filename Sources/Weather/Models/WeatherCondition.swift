@@ -42,9 +42,11 @@ public enum WeatherCondition: String, Codable, Sendable, CaseIterable {
         }
     }
 
-    /// Creates a condition from a WMO weather code.
-    /// - Parameter code: The WMO weather code (0-99).
-    /// - Returns: The corresponding `WeatherCondition`.
+    /**
+     Creates a condition from a WMO weather code.
+     - Parameter code: The WMO weather code (0-99).
+     - Returns: The corresponding `WeatherCondition`.
+     */
     public static func fromWMOCode(_ code: Int) -> WeatherCondition {
         switch code {
         case 0:
@@ -74,9 +76,11 @@ public enum WeatherCondition: String, Codable, Sendable, CaseIterable {
         }
     }
 
-    /// Creates a condition from NWS text description.
-    /// - Parameter text: The NWS text description.
-    /// - Returns: The corresponding `WeatherCondition`.
+    /**
+     Creates a condition from NWS text description.
+     - Parameter text: The NWS text description.
+     - Returns: The corresponding `WeatherCondition`.
+     */
     public static func fromNWSText(_ text: String) -> WeatherCondition {
         let lower = text.lowercased()
 

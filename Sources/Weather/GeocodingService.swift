@@ -4,9 +4,11 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// A shared service for geocoding city names to coordinates.
-///
-/// Uses the Open-Meteo geocoding API which is free and requires no authentication.
+/**
+ A shared service for geocoding city names to coordinates.
+
+ Uses the Open-Meteo geocoding API which is free and requires no authentication.
+ */
 public actor GeocodingService {
     /// Shared singleton instance.
     public static let shared = GeocodingService()
@@ -30,10 +32,12 @@ public actor GeocodingService {
         self.decoder = decoder
     }
 
-    /// Geocodes a city name to coordinates.
-    /// - Parameter city: The city name (e.g., "Seattle, WA" or "Paris, France").
-    /// - Returns: A tuple of (latitude, longitude, resolved name).
-    /// - Throws: `WeatherError.locationNotFound` if the city cannot be found.
+    /**
+     Geocodes a city name to coordinates.
+     - Parameter city: The city name (e.g., "Seattle, WA" or "Paris, France").
+     - Returns: A tuple of (latitude, longitude, resolved name).
+     - Throws: `WeatherError.locationNotFound` if the city cannot be found.
+     */
     public func geocode(city: String) async throws -> (latitude: Double, longitude: Double, name: String?) {
         guard var components = URLComponents(url: Self.baseURL, resolvingAgainstBaseURL: false) else {
             throw WeatherError.invalidURL(Self.baseURL.absoluteString)

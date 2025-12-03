@@ -5,12 +5,14 @@ import Retry
 import FoundationNetworking
 #endif
 
-/// National Weather Service API weather provider.
-///
-/// Provides free weather data for US locations only.
-/// Requires a User-Agent header identifying your application.
-///
-/// API Documentation: https://www.weather.gov/documentation/services-web-api
+/**
+ National Weather Service API weather provider.
+
+ Provides free weather data for US locations only.
+ Requires a User-Agent header identifying your application.
+
+ API Documentation: https://www.weather.gov/documentation/services-web-api
+ */
 public actor NWSProvider: WeatherProvider {
     /// Provider information.
     public let info = WeatherProviderInfo.nws
@@ -27,10 +29,12 @@ public actor NWSProvider: WeatherProvider {
     /// Base URL for NWS API.
     private static let baseURL = URL(string: "https://api.weather.gov")!
 
-    /// Creates a new NWS provider.
-    /// - Parameters:
-    ///   - userAgent: User-Agent string identifying your app. Format: "(AppName, contact@email.com)"
-    ///   - session: The URL session to use. Defaults to `.shared`.
+    /**
+     Creates a new NWS provider.
+     - Parameters:
+       - userAgent: User-Agent string identifying your app. Format: "(AppName, contact@email.com)"
+       - session: The URL session to use. Defaults to `.shared`.
+     */
     public init(userAgent: String, session: URLSession = .shared) {
         self.userAgent = userAgent
         self.session = session

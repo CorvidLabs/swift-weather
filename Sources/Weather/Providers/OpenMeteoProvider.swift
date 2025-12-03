@@ -5,12 +5,14 @@ import Retry
 import FoundationNetworking
 #endif
 
-/// Open-Meteo API weather provider.
-///
-/// Provides global weather data. Free for non-commercial use,
-/// requires subscription for commercial use.
-///
-/// API Documentation: https://open-meteo.com/en/docs
+/**
+ Open-Meteo API weather provider.
+
+ Provides global weather data. Free for non-commercial use,
+ requires subscription for commercial use.
+
+ API Documentation: https://open-meteo.com/en/docs
+ */
 public actor OpenMeteoProvider: WeatherProvider {
     /// Provider information.
     public let info = WeatherProviderInfo.openMeteo

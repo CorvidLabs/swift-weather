@@ -4,30 +4,32 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// A client for fetching weather data from multiple providers.
-///
-/// `Weather` provides a unified interface for weather data, automatically
-/// selecting the best provider based on location. For US locations, it uses
-/// the NWS API (free for commercial use). For international locations or
-/// as a fallback, it uses Open-Meteo.
-///
-/// Example usage:
-///
-/// ```swift
-/// let weather = Weather(userAgent: "(MyApp, me@example.com)")
-///
-/// // By coordinates (US - uses NWS)
-/// let seattle = try await weather.current(latitude: 47.6, longitude: -122.3)
-/// print("\(seattle.temperature.formatted()) - \(seattle.condition.description)")
-///
-/// // By city (international - uses Open-Meteo)
-/// let paris = try await weather.current(city: "Paris, France")
-///
-/// // Stream weather updates every hour
-/// for await update in weather.weatherUpdates(at: .city("Seattle, WA"), intervalSeconds: 3600) {
-///     print("Update: \(update.temperature.formatted())")
-/// }
-/// ```
+/**
+ A client for fetching weather data from multiple providers.
+
+ `Weather` provides a unified interface for weather data, automatically
+ selecting the best provider based on location. For US locations, it uses
+ the NWS API (free for commercial use). For international locations or
+ as a fallback, it uses Open-Meteo.
+
+ Example usage:
+
+ ```swift
+ let weather = Weather(userAgent: "(MyApp, me@example.com)")
+
+ // By coordinates (US - uses NWS)
+ let seattle = try await weather.current(latitude: 47.6, longitude: -122.3)
+ print("\(seattle.temperature.formatted()) - \(seattle.condition.description)")
+
+ // By city (international - uses Open-Meteo)
+ let paris = try await weather.current(city: "Paris, France")
+
+ // Stream weather updates every hour
+ for await update in weather.weatherUpdates(at: .city("Seattle, WA"), intervalSeconds: 3600) {
+     print("Update: \(update.temperature.formatted())")
+ }
+ ```
+ */
 public actor Weather {
     /// The configuration for this client.
     public let configuration: WeatherConfiguration
@@ -38,10 +40,12 @@ public actor Weather {
     /// The URL session for requests.
     private let session: URLSession
 
-    /// Creates a new Weather client.
-    /// - Parameters:
-    ///   - configuration: The configuration for this client.
-    ///   - session: The URL session to use. Defaults to `.shared`.
+    /**
+     Creates a new Weather client.
+     - Parameters:
+       - configuration: The configuration for this client.
+       - session: The URL session to use. Defaults to `.shared`.
+     */
     public init(
         configuration: WeatherConfiguration,
         session: URLSession = .shared
@@ -54,10 +58,12 @@ public actor Weather {
         )
     }
 
-    /// Creates a new Weather client with default configuration.
-    /// - Parameters:
-    ///   - userAgent: User-Agent string for NWS API. Format: "(AppName, contact@email.com)"
-    ///   - session: The URL session to use. Defaults to `.shared`.
+    /**
+     Creates a new Weather client with default configuration.
+     - Parameters:
+       - userAgent: User-Agent string for NWS API. Format: "(AppName, contact@email.com)"
+       - session: The URL session to use. Defaults to `.shared`.
+     */
     public init(
         userAgent: String,
         session: URLSession = .shared
@@ -70,40 +76,48 @@ public actor Weather {
 
     // MARK: - Public API
 
-    /// Fetches current weather for the given location.
-    /// - Parameter location: The location to fetch weather for.
-    /// - Returns: The current weather conditions.
-    /// - Throws: `WeatherError` if the request fails.
+    /**
+     Fetches current weather for the given location.
+     - Parameter location: The location to fetch weather for.
+     - Returns: The current weather conditions.
+     - Throws: `WeatherError` if the request fails.
+     */
     public func current(at location: Location) async throws -> CurrentWeather {
         try await firstSuccessfulProvider(for: location)
     }
 
-    /// Fetches current weather for the given coordinates.
-    /// - Parameters:
-    ///   - latitude: The latitude.
-    ///   - longitude: The longitude.
-    /// - Returns: The current weather conditions.
-    /// - Throws: `WeatherError` if the request fails.
+    /**
+     Fetches current weather for the given coordinates.
+     - Parameters:
+       - latitude: The latitude.
+       - longitude: The longitude.
+     - Returns: The current weather conditions.
+     - Throws: `WeatherError` if the request fails.
+     */
     public func current(latitude: Double, longitude: Double) async throws -> CurrentWeather {
         try await current(at: .coordinates(latitude: latitude, longitude: longitude))
     }
 
-    /// Fetches current weather for the given city.
-    /// - Parameter city: The city name (e.g., "Seattle, WA" or "Paris, France").
-    /// - Returns: The current weather conditions.
-    /// - Throws: `WeatherError` if the request fails.
+    /**
+     Fetches current weather for the given city.
+     - Parameter city: The city name (e.g., "Seattle, WA" or "Paris, France").
+     - Returns: The current weather conditions.
+     - Throws: `WeatherError` if the request fails.
+     */
     public func current(city: String) async throws -> CurrentWeather {
         try await current(at: .city(city))
     }
 
-    /// Creates an async stream of weather updates for a location.
-    ///
-    /// The stream fetches weather at the specified interval until cancelled.
-    ///
-    /// - Parameters:
-    ///   - location: The location to fetch weather for.
-    ///   - intervalSeconds: The interval between updates in seconds. Defaults to 3600 (1 hour).
-    /// - Returns: An `AsyncStream` yielding weather updates.
+    /**
+     Creates an async stream of weather updates for a location.
+
+     The stream fetches weather at the specified interval until cancelled.
+
+     - Parameters:
+       - location: The location to fetch weather for.
+       - intervalSeconds: The interval between updates in seconds. Defaults to 3600 (1 hour).
+     - Returns: An `AsyncStream` yielding weather updates.
+     */
     public func weatherUpdates(
         at location: Location,
         intervalSeconds: UInt64 = 3600
