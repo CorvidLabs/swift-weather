@@ -1,9 +1,9 @@
 # SwiftWeather
 
-![macOS](https://github.com/CorvidLabs/swift-weather/actions/workflows/macOS.yml/badge.svg)
-![Ubuntu](https://github.com/CorvidLabs/swift-weather/actions/workflows/ubuntu.yml/badge.svg)
-![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-orange.svg)
-![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+[![macOS](https://img.shields.io/github/actions/workflow/status/CorvidLabs/swift-weather/macOS.yml?label=macOS&branch=main)](https://github.com/CorvidLabs/swift-weather/actions/workflows/macOS.yml)
+[![Ubuntu](https://img.shields.io/github/actions/workflow/status/CorvidLabs/swift-weather/ubuntu.yml?label=Ubuntu&branch=main)](https://github.com/CorvidLabs/swift-weather/actions/workflows/ubuntu.yml)
+[![License](https://img.shields.io/github/license/CorvidLabs/swift-weather)](https://github.com/CorvidLabs/swift-weather/blob/main/LICENSE)
+[![Version](https://img.shields.io/github/v/release/CorvidLabs/swift-weather)](https://github.com/CorvidLabs/swift-weather/releases)
 
 A Swift library for fetching weather data from multiple providers.
 
