@@ -202,7 +202,7 @@ public actor OpenMeteoProvider: WeatherProvider {
         }
     }
 
-    private func perform<T: Decodable>(_ request: URLRequest) async throws -> T {
+    private func perform<T: Decodable & Sendable>(_ request: URLRequest) async throws -> T {
         try await Retry.execute(
             maxAttempts: 3,
             strategy: ExponentialStrategy(base: 1.0, multiplier: 2.0),
