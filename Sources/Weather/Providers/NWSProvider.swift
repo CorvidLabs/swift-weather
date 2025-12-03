@@ -70,6 +70,168 @@ public actor NWSProvider: WeatherProvider {
         )
     }
 
+    /// Fetches a multi-day forecast from NWS.
+    public func forecast(for location: Location, days: Int) async throws -> Forecast {
+        let (latitude, longitude, locationName) = try await resolveLocation(location)
+        let clampedDays = max(1, min(7, days)) // NWS provides 7-day forecasts
+
+        // Get grid point info
+        let gridInfo = try await getGridInfo(latitude: latitude, longitude: longitude)
+
+        // Get forecast URL from grid info
+        guard let forecastURLString = gridInfo.properties.forecast,
+              let forecastURL = URL(string: forecastURLString) else {
+            throw WeatherError.noDataAvailable
+        }
+
+        var request = URLRequest(url: forecastURL)
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        request.setValue("application/geo+json", forHTTPHeaderField: "Accept")
+
+        let forecastResponse: NWSForecastResponse = try await perform(request)
+
+        // NWS returns periods (day/night), combine them into daily forecasts
+        let dailyForecasts = parseDailyForecasts(
+            from: forecastResponse.properties.periods,
+            maxDays: clampedDays
+        )
+
+        return Forecast(
+            location: ResolvedLocation(
+                latitude: latitude,
+                longitude: longitude,
+                name: locationName ?? gridInfo.properties.relativeLocation?.properties.city
+            ),
+            daily: dailyForecasts,
+            provider: info
+        )
+    }
+
+    /// Fetches hourly forecast from NWS.
+    public func hourlyForecast(for location: Location, hours: Int) async throws -> [HourlyForecast] {
+        let (latitude, longitude, _) = try await resolveLocation(location)
+        let clampedHours = max(1, min(156, hours)) // NWS provides ~156 hours
+
+        // Get grid point info
+        let gridInfo = try await getGridInfo(latitude: latitude, longitude: longitude)
+
+        // Get hourly forecast URL from grid info
+        guard let hourlyURLString = gridInfo.properties.forecastHourly,
+              let hourlyURL = URL(string: hourlyURLString) else {
+            throw WeatherError.noDataAvailable
+        }
+
+        var request = URLRequest(url: hourlyURL)
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        request.setValue("application/geo+json", forHTTPHeaderField: "Accept")
+
+        let forecastResponse: NWSForecastResponse = try await perform(request)
+
+        return forecastResponse.properties.periods.prefix(clampedHours).map { period in
+            let condition = WeatherCondition.fromNWSText(period.shortForecast)
+            return HourlyForecast(
+                time: period.startTime,
+                temperature: Temperature.fahrenheit(Double(period.temperature)),
+                apparentTemperature: nil,
+                condition: condition,
+                conditionDescription: period.shortForecast,
+                precipitationProbability: period.probabilityOfPrecipitation?.value.map { Double($0) },
+                humidity: period.relativeHumidity?.value.map { Double($0) },
+                windSpeed: parseWindSpeed(period.windSpeed),
+                windDirection: parseWindDirection(period.windDirection),
+                isDaytime: period.isDaytime
+            )
+        }
+    }
+
+    // MARK: - Private Forecast Helpers
+
+    private func parseDailyForecasts(from periods: [NWSPeriod], maxDays: Int) -> [DailyForecast] {
+        var dailyMap: [String: (day: NWSPeriod?, night: NWSPeriod?)] = [:]
+
+        for period in periods {
+            let dateKey = formatDateKey(period.startTime)
+
+            if dailyMap[dateKey] == nil {
+                dailyMap[dateKey] = (nil, nil)
+            }
+
+            if period.isDaytime {
+                dailyMap[dateKey]?.day = period
+            } else {
+                dailyMap[dateKey]?.night = period
+            }
+        }
+
+        // Sort by date and create daily forecasts
+        let sortedDates = dailyMap.keys.sorted()
+        return sortedDates.prefix(maxDays).compactMap { dateKey -> DailyForecast? in
+            guard let entry = dailyMap[dateKey] else { return nil }
+
+            let dayPeriod = entry.day
+            let nightPeriod = entry.night
+
+            // Get high from day period, low from night period
+            let highTemp = dayPeriod.map { Temperature.fahrenheit(Double($0.temperature)) }
+                ?? nightPeriod.map { Temperature.fahrenheit(Double($0.temperature)) }
+            let lowTemp = nightPeriod.map { Temperature.fahrenheit(Double($0.temperature)) }
+                ?? dayPeriod.map { Temperature.fahrenheit(Double($0.temperature)) }
+
+            guard let high = highTemp, let low = lowTemp else { return nil }
+
+            let forecastText = dayPeriod?.shortForecast ?? nightPeriod?.shortForecast ?? "Unknown"
+            let condition = WeatherCondition.fromNWSText(forecastText)
+
+            // Parse date from the first available period
+            let date = dayPeriod?.startTime ?? nightPeriod?.startTime ?? Date()
+
+            // Get precipitation probability (max of day/night)
+            let dayPrecip = dayPeriod?.probabilityOfPrecipitation?.value ?? 0
+            let nightPrecip = nightPeriod?.probabilityOfPrecipitation?.value ?? 0
+            let precipProb = max(dayPrecip, nightPrecip)
+
+            return DailyForecast(
+                date: date,
+                highTemperature: high,
+                lowTemperature: low,
+                condition: condition,
+                conditionDescription: forecastText,
+                precipitationProbability: precipProb > 0 ? Double(precipProb) : nil,
+                precipitationAmount: nil,
+                sunrise: nil,
+                sunset: nil,
+                uvIndex: nil
+            )
+        }
+    }
+
+    private func formatDateKey(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
+
+    private func parseWindSpeed(_ windSpeed: String?) -> Double? {
+        guard let speed = windSpeed else { return nil }
+        // Format: "10 mph" or "10 to 15 mph"
+        let components = speed.components(separatedBy: " ")
+        if let first = components.first, let value = Double(first) {
+            return value * 1.60934 // Convert mph to km/h
+        }
+        return nil
+    }
+
+    private func parseWindDirection(_ direction: String?) -> Double? {
+        guard let dir = direction else { return nil }
+        let directions: [String: Double] = [
+            "N": 0, "NNE": 22.5, "NE": 45, "ENE": 67.5,
+            "E": 90, "ESE": 112.5, "SE": 135, "SSE": 157.5,
+            "S": 180, "SSW": 202.5, "SW": 225, "WSW": 247.5,
+            "W": 270, "WNW": 292.5, "NW": 315, "NNW": 337.5
+        ]
+        return directions[dir]
+    }
+
     // MARK: - Private
 
     private func resolveLocation(_ location: Location) async throws -> (Double, Double, String?) {
@@ -236,6 +398,8 @@ private struct NWSPointsResponse: Decodable {
 
     struct PointsProperties: Decodable {
         let observationStations: String?
+        let forecast: String?
+        let forecastHourly: String?
         let relativeLocation: RelativeLocation?
     }
 
@@ -278,6 +442,37 @@ private struct NWSObservation: Decodable {
     struct QuantitativeValue: Decodable {
         let value: Double?
         let unitCode: String?
+    }
+}
+
+private struct NWSForecastResponse: Decodable {
+    let properties: ForecastProperties
+
+    struct ForecastProperties: Decodable {
+        let periods: [NWSPeriod]
+    }
+}
+
+private struct NWSPeriod: Decodable {
+    let name: String
+    let startTime: Date
+    let endTime: Date
+    let isDaytime: Bool
+    let temperature: Int
+    let temperatureUnit: String
+    let shortForecast: String
+    let detailedForecast: String?
+    let windSpeed: String?
+    let windDirection: String?
+    let probabilityOfPrecipitation: PrecipitationValue?
+    let relativeHumidity: HumidityValue?
+
+    struct PrecipitationValue: Decodable {
+        let value: Int?
+    }
+
+    struct HumidityValue: Decodable {
+        let value: Int?
     }
 }
 

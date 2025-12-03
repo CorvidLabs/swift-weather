@@ -39,4 +39,24 @@ public protocol WeatherProvider: Sendable {
      - Throws: `WeatherError` if the request fails.
      */
     func currentWeather(for location: Location) async throws -> CurrentWeather
+
+    /**
+     Fetches a multi-day forecast for the given location.
+     - Parameters:
+       - location: The location to fetch the forecast for.
+       - days: Number of days to forecast (1-16, provider dependent).
+     - Returns: The forecast.
+     - Throws: `WeatherError` if the request fails.
+     */
+    func forecast(for location: Location, days: Int) async throws -> Forecast
+
+    /**
+     Fetches an hourly forecast for the given location.
+     - Parameters:
+       - location: The location to fetch the forecast for.
+       - hours: Number of hours to forecast (1-168, provider dependent).
+     - Returns: The hourly forecasts.
+     - Throws: `WeatherError` if the request fails.
+     */
+    func hourlyForecast(for location: Location, hours: Int) async throws -> [HourlyForecast]
 }

@@ -108,6 +108,82 @@ public actor Weather {
         try await current(at: .city(city))
     }
 
+    // MARK: - Forecast API
+
+    /**
+     Fetches a multi-day forecast for the given location.
+     - Parameters:
+       - location: The location to fetch the forecast for.
+       - days: Number of days to forecast (1-16, provider dependent). Defaults to 7.
+     - Returns: The forecast.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func forecast(at location: Location, days: Int = 7) async throws -> Forecast {
+        try await firstSuccessfulForecast(for: location, days: days)
+    }
+
+    /**
+     Fetches a multi-day forecast for the given coordinates.
+     - Parameters:
+       - latitude: The latitude.
+       - longitude: The longitude.
+       - days: Number of days to forecast. Defaults to 7.
+     - Returns: The forecast.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func forecast(latitude: Double, longitude: Double, days: Int = 7) async throws -> Forecast {
+        try await forecast(at: .coordinates(latitude: latitude, longitude: longitude), days: days)
+    }
+
+    /**
+     Fetches a multi-day forecast for the given city.
+     - Parameters:
+       - city: The city name (e.g., "Seattle, WA" or "Paris, France").
+       - days: Number of days to forecast. Defaults to 7.
+     - Returns: The forecast.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func forecast(city: String, days: Int = 7) async throws -> Forecast {
+        try await forecast(at: .city(city), days: days)
+    }
+
+    /**
+     Fetches an hourly forecast for the given location.
+     - Parameters:
+       - location: The location to fetch the forecast for.
+       - hours: Number of hours to forecast (1-168). Defaults to 24.
+     - Returns: The hourly forecasts.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func hourlyForecast(at location: Location, hours: Int = 24) async throws -> [HourlyForecast] {
+        try await firstSuccessfulHourlyForecast(for: location, hours: hours)
+    }
+
+    /**
+     Fetches an hourly forecast for the given coordinates.
+     - Parameters:
+       - latitude: The latitude.
+       - longitude: The longitude.
+       - hours: Number of hours to forecast. Defaults to 24.
+     - Returns: The hourly forecasts.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func hourlyForecast(latitude: Double, longitude: Double, hours: Int = 24) async throws -> [HourlyForecast] {
+        try await hourlyForecast(at: .coordinates(latitude: latitude, longitude: longitude), hours: hours)
+    }
+
+    /**
+     Fetches an hourly forecast for the given city.
+     - Parameters:
+       - city: The city name (e.g., "Seattle, WA" or "Paris, France").
+       - hours: Number of hours to forecast. Defaults to 24.
+     - Returns: The hourly forecasts.
+     - Throws: `WeatherError` if the request fails.
+     */
+    public func hourlyForecast(city: String, hours: Int = 24) async throws -> [HourlyForecast] {
+        try await hourlyForecast(at: .city(city), hours: hours)
+    }
+
     /**
      Creates an async stream of weather updates for a location.
 
@@ -152,6 +228,46 @@ public actor Weather {
 
             do {
                 return try await provider.currentWeather(for: location)
+            } catch {
+                lastError = error
+            }
+        }
+
+        if let error = lastError {
+            throw error
+        }
+        throw WeatherError.noProviderAvailable
+    }
+
+    /// Tries each provider in order until one succeeds for forecast.
+    private func firstSuccessfulForecast(for location: Location, days: Int) async throws -> Forecast {
+        var lastError: Error?
+
+        for provider in providers {
+            guard await provider.supports(location: location) else { continue }
+
+            do {
+                return try await provider.forecast(for: location, days: days)
+            } catch {
+                lastError = error
+            }
+        }
+
+        if let error = lastError {
+            throw error
+        }
+        throw WeatherError.noProviderAvailable
+    }
+
+    /// Tries each provider in order until one succeeds for hourly forecast.
+    private func firstSuccessfulHourlyForecast(for location: Location, hours: Int) async throws -> [HourlyForecast] {
+        var lastError: Error?
+
+        for provider in providers {
+            guard await provider.supports(location: location) else { continue }
+
+            do {
+                return try await provider.hourlyForecast(for: location, hours: hours)
             } catch {
                 lastError = error
             }
