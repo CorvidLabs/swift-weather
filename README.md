@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/github/license/CorvidLabs/swift-weather)](https://github.com/CorvidLabs/swift-weather/blob/main/LICENSE)
 [![Version](https://img.shields.io/github/v/release/CorvidLabs/swift-weather)](https://github.com/CorvidLabs/swift-weather/releases)
 
+> **Pre-1.0 Notice**: This library is under active development. The API may change between minor versions until 1.0.
+
 A Swift library for fetching weather data from multiple providers.
 
 ## Features
