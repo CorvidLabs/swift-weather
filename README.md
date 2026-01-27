@@ -89,13 +89,6 @@ The library supports these weather conditions:
 - `thunderstorm` - Thunderstorms
 - `unknown` - Unknown condition
 
-## Examples
-
-See `Examples/` for complete sample applications:
-
-- **weather-nft-example** - Generate SVG weather images for NFTs
-- **weather-tui-demo** - Interactive terminal weather dashboard
-
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
