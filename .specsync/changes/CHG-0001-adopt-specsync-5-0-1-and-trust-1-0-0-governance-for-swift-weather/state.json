@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "CHG-0001-adopt-specsync-5-0-1-and-trust-1-0-0-governance-for-swift-weather",
+  "slug": "adopt-specsync-5-0-1-and-trust-1-0-0-governance-for-swift-weather",
+  "title": "Adopt SpecSync 5.0.1 and Trust 1.0.0 governance for Swift Weather",
+  "description": "Adopt SpecSync 5.0.1 and Trust 1.0.0 governance for Swift Weather",
+  "kind": "migration",
+  "state": "draft",
+  "base_commit": "983d473c39a4cbfb22cf00ca1f5fb16c86be7fd8",
+  "created_at": 1783886596,
+  "updated_at": 1783886605,
+  "affected_specs": [],
+  "affected_paths": [
+    ".github/",
+    ".specsync/",
+    ".trust.toml",
+    ".augur.toml",
+    ".attest.json",
+    "fledge.toml",
+    "AGENTS.md"
+  ],
+  "no_spec_change": true,
+  "no_spec_change_rationale": "Governance and CI only; public API, behavior, and live-network boundaries are unchanged.",
+  "acceptance_criteria": [
+    "Native Swift build and deterministic tests pass; four agents and Trust doctor are healthy; existing platform",
+    "DocC",
+    "API",
+    "and live network boundaries remain unchanged."
+  ],
+  "selected_artifacts": [
+    "context",
+    "research",
+    "design",
+    "plan",
+    "tasks",
+    "testing",
+    "docs"
+  ],
+  "dependencies": [],
+  "answers": {
+    "architecture_risk": "yes",
+    "public_contract": "no"
+  }
+}

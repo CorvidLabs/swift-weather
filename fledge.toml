@@ -1,0 +1,6 @@
+[tasks]
+build = "swift build -v"
+test = "swift test -v"
+[lanes.verify]
+description = "Build and test Swift Weather without adding live network probes"
+steps = ["build", "test"]
