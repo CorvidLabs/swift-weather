@@ -22,10 +22,7 @@
   "no_spec_change": true,
   "no_spec_change_rationale": "Governance and CI only; public API, behavior, and live-network boundaries are unchanged.",
   "acceptance_criteria": [
-    "Native Swift build and deterministic tests pass; four agents and Trust doctor are healthy; existing platform",
-    "DocC",
-    "API",
-    "and live network boundaries remain unchanged."
+    "Native Swift build and deterministic tests pass; four agents and Trust doctor are healthy; existing platform, DocC, API, and live network boundaries remain unchanged."
   ],
   "selected_artifacts": [
     "context",
