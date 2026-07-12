@@ -5,4 +5,7 @@ artifact: tasks
 
 # Tasks
 
-- [x] Add governance configuration.\n- [x] Install four agent integrations.\n- [x] Validate native build and tests.\n- [ ] Obtain owner definition and closing approvals.
+- [x] Add governance configuration.
+- [x] Install four agent integrations.
+- [x] Validate native build and tests.
+- [ ] Obtain owner definition and closing approvals.

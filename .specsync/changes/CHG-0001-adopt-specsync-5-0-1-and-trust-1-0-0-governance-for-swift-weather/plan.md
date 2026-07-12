@@ -5,4 +5,7 @@ artifact: plan
 
 # Plan
 
-1. Adopt SpecSync 5.0.1.\n2. Install all four agents.\n3. Add standard Trust policy and native Fledge verification.\n4. Validate locally and in hosted CI.
+1. Adopt SpecSync 5.0.1.
+2. Install all four agents.
+3. Add standard Trust policy and native Fledge verification.
+4. Validate locally and in hosted CI.
