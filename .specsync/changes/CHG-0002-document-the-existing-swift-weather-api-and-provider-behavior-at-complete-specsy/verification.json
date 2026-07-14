@@ -1,0 +1,26 @@
+{
+  "timestamp": 1784005320,
+  "commit": "5132af23cc2ec0717a28dff9031e3ce8a0388efe",
+  "contract_digest": "fba96bc464cd8c690e65dc3af8ac712b5be27edc94e8637156666341e776c6f1",
+  "workspace_digest": "ca87018db09800ad0225346df39d570942cb88422bb3ed8a40c05e92be0f90b9",
+  "acceptance_input_digest": "58a115db042f57f700585a87f13b2013dac662a87ccff453de3f89ebaff9561a",
+  "passed": true,
+  "commands": [
+    {
+      "command": "fledge lanes run verify",
+      "success": true,
+      "exit_code": 0
+    }
+  ],
+  "requirement_ids": [
+    "REQ-weather-001",
+    "REQ-weather-002",
+    "REQ-weather-003",
+    "REQ-weather-004",
+    "REQ-weather-005",
+    "REQ-weather-006",
+    "REQ-weather-007",
+    "REQ-weather-008",
+    "REQ-weather-009"
+  ]
+}
