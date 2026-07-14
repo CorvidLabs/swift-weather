@@ -8,4 +8,5 @@ artifact: tasks
 - [x] Add governance configuration.
 - [x] Install four agent integrations.
 - [x] Validate native build and tests.
-- [ ] Obtain owner definition and closing approvals.
+- [x] Configure the canonical companion at 100% coverage.
+- [x] Replace circular approval work with completed preparation and portable verification configuration.

@@ -1,3 +1,18 @@
 {
-  "approvals": []
+  "approvals": [
+    {
+      "gate": "definition",
+      "actor": "user:0xLeif",
+      "timestamp": 1784005285,
+      "digest": "be9cf2e0cc03fc4bc2a5a9a13c378c556040ab420f9500b58b6fda15772f0d38",
+      "note": "Definition approved after review of the governance-only migration, preserved workflows, full companion plan, deterministic no-live-network lane, and portable verification contract."
+    },
+    {
+      "gate": "acceptance",
+      "actor": "user:0xLeif",
+      "timestamp": 1784005361,
+      "digest": "e2d6e533797f1c8d82fad8113c136928021192494175c9fd2ba2b3eb348a825e",
+      "note": "Closing approval recorded after CHG-0002 applied the reviewed canonical delta, strict SpecSync remained at 100 percent and A/100, and the portable native gate built the package and passed all 57 deterministic tests without live probes."
+    }
+  ]
 }

@@ -5,4 +5,4 @@ artifact: testing
 
 # Testing
 
-Run Swift build and tests, agent status, Trust doctor, strict SpecSync validation, and hosted checks while preserving existing platform lanes.
+Run Swift build and all 57 deterministic tests, agent status, Trust doctor, strict SpecSync at 100%, and hosted checks while preserving existing platform lanes and making no live probe.

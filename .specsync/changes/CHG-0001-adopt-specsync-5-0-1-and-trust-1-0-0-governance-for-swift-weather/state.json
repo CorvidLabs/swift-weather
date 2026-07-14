@@ -5,10 +5,10 @@
   "title": "Adopt SpecSync 5.0.1 and Trust 1.0.0 governance for Swift Weather",
   "description": "Adopt SpecSync 5.0.1 and Trust 1.0.0 governance for Swift Weather",
   "kind": "migration",
-  "state": "draft",
+  "state": "accepted",
   "base_commit": "983d473c39a4cbfb22cf00ca1f5fb16c86be7fd8",
   "created_at": 1783886596,
-  "updated_at": 1783886605,
+  "updated_at": 1784005361,
   "affected_specs": [],
   "affected_paths": [
     ".github/",
@@ -20,9 +20,9 @@
     "AGENTS.md"
   ],
   "no_spec_change": true,
-  "no_spec_change_rationale": "Governance and CI only; public API, behavior, and live-network boundaries are unchanged.",
+  "no_spec_change_rationale": "Governance and CI only; CHG-0002 documents existing semantics while public API, behavior, and live-network boundaries remain unchanged.",
   "acceptance_criteria": [
-    "Native Swift build and deterministic tests pass; four agents and Trust doctor are healthy; existing platform, DocC, API, and live network boundaries remain unchanged."
+    "Strict SpecSync passes at 100% file and LOC coverage; native Swift build and all 57 deterministic tests pass; four agents and Trust doctor are healthy; existing platform, DocC, release, API, and live-network boundaries remain unchanged."
   ],
   "selected_artifacts": [
     "context",
