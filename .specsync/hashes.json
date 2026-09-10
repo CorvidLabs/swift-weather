@@ -1,34 +1,22 @@
 {
-  "format_version": 1,
   "hashes": {
-    ".specsync/config.toml": "2e2ca2f7a1cd873887818ffffdb520b4f2f35f31a3509fc1427d5d4e256d537c",
-    "Sources/Weather/GeocodingService.swift": "e29f9839e2c83d21e1f09ec51f152f22580d99f4e91785c084622a79bcf96b24",
-    "Sources/Weather/Models/CurrentWeather.swift": "3af712e33766d52305b286f7b2e1c8a5ca1b0932fafff7b946e6b5064e6bb4dc",
-    "Sources/Weather/Models/Forecast.swift": "822c07313967b967f4d51f058ca3d2bc744de34cd20caedf68b650a139956109",
-    "Sources/Weather/Models/Location.swift": "cb1726124af543a9c5cd5319a136fa2e11f3eaf5db2d762644f9a373cbc7928d",
-    "Sources/Weather/Models/Temperature.swift": "6eee087177f01341b329040ac715cf87c4c421b70b17fc845745cdfe305fd31d",
-    "Sources/Weather/Models/WeatherCondition.swift": "14b732b02dfd1dff6a32f6a3e4dc67b1458b484c0396725337aed235114e72a7",
-    "Sources/Weather/Providers/NWSProvider.swift": "d7537c7cf76a0fbcc5931f8725ccd4dfc18cb4a1f5b325bf107e636a45870a4a",
-    "Sources/Weather/Providers/OpenMeteoProvider.swift": "6d5896e74674e39ff9ef706ffbdc7832945df52063c0b0a6bf5252a0ba9fc7ab",
-    "Sources/Weather/Providers/WeatherProvider.swift": "7c733aa4b510842e01e255f01fb9f7ebd0398cdbcd22e2962ad1d351d139be1c",
-    "Sources/Weather/Weather.swift": "ad6ad3a64ab9db370f3634eb4693c32bfbaa52a2f3cf3399a734f972d248ccef",
-    "Sources/Weather/WeatherConfiguration.swift": "8954761646162a57771fcfadce1a6d06c0dfdb863fa8a3d5c6e602f1f5245531",
-    "Sources/Weather/WeatherError.swift": "1c29b518f2bd4d970a57870a3f8fd1392999b9440b52a5c57e5997c443fe1578",
     "specs/weather/context.md": "326fd8c9fd88e0280545776bf7ed8468e93958b535e7984d86498fb649ae0c14",
     "specs/weather/requirements.md": "08937fa4f3778db77dc037af5cbb424f96f539f92db9e00102efd65cd3183f4f",
     "specs/weather/tasks.md": "9049b7976ea11e8ab52a950ba7ddabf4aa5e3e1ed0877360392b203866452439",
+    ".specsync/config.toml": "2e2ca2f7a1cd873887818ffffdb520b4f2f35f31a3509fc1427d5d4e256d537c",
+    "Sources/Weather/Providers/OpenMeteoProvider.swift": "6d5896e74674e39ff9ef706ffbdc7832945df52063c0b0a6bf5252a0ba9fc7ab",
     "specs/weather/testing.md": "204b7f4d5e248c2577f3ae1dcf71fe4236073f630cbc345b2d98fdc4af86c05a",
-    "specs/weather/weather.spec.md": "eb3bf0911b2eb6832159fd1331c006a55c2cfee52eaf0f930f7b72f57372066a"
-  },
-  "snapshots": {
-    "specs/weather/weather.spec.md": {
-      "snapshot_version": 1,
-      "spec_path": "specs/weather/weather.spec.md",
-      "errors": [],
-      "warnings": [],
-      "notices": [],
-      "input_digest": "694b805a8e56229e4b083a7c5073555edf41a9ebc5652a4a76b4184903c719b7",
-      "snapshot_digest": "1b84c8233e912302e94d1efd437a20218a87b8534ad75fdc3c4473b91f571b0c"
-    }
+    "Sources/Weather/Providers/WeatherProvider.swift": "7c733aa4b510842e01e255f01fb9f7ebd0398cdbcd22e2962ad1d351d139be1c",
+    "Sources/Weather/Providers/NWSProvider.swift": "d7537c7cf76a0fbcc5931f8725ccd4dfc18cb4a1f5b325bf107e636a45870a4a",
+    "Sources/Weather/WeatherConfiguration.swift": "8954761646162a57771fcfadce1a6d06c0dfdb863fa8a3d5c6e602f1f5245531",
+    "Sources/Weather/Models/Forecast.swift": "822c07313967b967f4d51f058ca3d2bc744de34cd20caedf68b650a139956109",
+    "Sources/Weather/Models/Location.swift": "cb1726124af543a9c5cd5319a136fa2e11f3eaf5db2d762644f9a373cbc7928d",
+    "Sources/Weather/Models/Temperature.swift": "6eee087177f01341b329040ac715cf87c4c421b70b17fc845745cdfe305fd31d",
+    "Sources/Weather/WeatherError.swift": "1c29b518f2bd4d970a57870a3f8fd1392999b9440b52a5c57e5997c443fe1578",
+    "Sources/Weather/Models/CurrentWeather.swift": "3af712e33766d52305b286f7b2e1c8a5ca1b0932fafff7b946e6b5064e6bb4dc",
+    "specs/weather/weather.spec.md": "eb3bf0911b2eb6832159fd1331c006a55c2cfee52eaf0f930f7b72f57372066a",
+    "Sources/Weather/Models/WeatherCondition.swift": "14b732b02dfd1dff6a32f6a3e4dc67b1458b484c0396725337aed235114e72a7",
+    "Sources/Weather/Weather.swift": "ad6ad3a64ab9db370f3634eb4693c32bfbaa52a2f3cf3399a734f972d248ccef",
+    "Sources/Weather/GeocodingService.swift": "e29f9839e2c83d21e1f09ec51f152f22580d99f4e91785c084622a79bcf96b24"
   }
 }
